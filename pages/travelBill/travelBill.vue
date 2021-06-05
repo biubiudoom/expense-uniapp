@@ -186,7 +186,7 @@
 	}
 
 	.swiper-box {
-		width: 700rpx;
+		width: 98%;
 		background-color: #ffffff;
 		margin: 20rpx auto;
 		border-radius: 20rpx;

@@ -8,8 +8,16 @@ export default {
 	},
 	getUserInfo(data) {
 		return request.httpTokenRequest({
-			url:"user/getuserinfo",
-			method: "get",
+			url:"topapi/v2/user/getuserinfo",
+			method: "post",
+			data,	
+		}, data)
+	},
+	getUser(data) {
+		return request.httpTokenRequest({
+			url:"topapi/v2/user/get",
+			method: "post",
+			data,	
 		}, data)
 	},
 }

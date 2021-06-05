@@ -5,7 +5,7 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "首页"
+			"navigationBarTitleText": "费用报销申请"
 		}
 	}, {
 		"path": "pages/loanBill/loanBill",
@@ -35,14 +35,12 @@
 			"enablePullDownRefresh": true,
 			"app-plus": {
 				"titleNView": {
-					"buttons": [
-						{
+					"buttons": [{
 						"fontSrc": "/static/uni.ttf",
 						"text": "\ue468",
 						"width": "40px",
 						"color": "#fff"
-					} 
-					]
+					}]
 				}
 			}
 		}
@@ -54,29 +52,44 @@
 			"enablePullDownRefresh": false
 		}
 
+	}, {
+		"path": "pages/travelBill/travelBill",
+		"style": {
+			"navigationBarTitleText": "差旅报销单",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/components/billDetail",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/components/collectionInfo",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
 	}    ,{
-            "path" : "pages/travelBill/travelBill",
+            "path" : "pages/components/addBill",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "差旅报销单",
-                "enablePullDownRefresh": false
+                "navigationBarTitleText": "详情",
+								"app-plus": {
+									"titleNView": {
+										"autoBackButton": false
+									}
+								}
             }
             
         }
         ,{
-            "path" : "pages/components/billDetail",
+            "path" : "pages/serveAccount/serveAccount",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/components/collectionInfo",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "招待费报销单",
                 "enablePullDownRefresh": false
             }
             
@@ -86,7 +99,6 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#06A7E2",
-		"backgroundColor": "#F8F8F8",
 		"app-plus": {
 			"background": "#06A7E2"
 		}

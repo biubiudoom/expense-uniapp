@@ -331,7 +331,7 @@
 				return Array.from(new Array(end + 1).keys()).slice(start);
 			},
 			formatNum: function(num) {
-				return num < 10 ? '0' + num : num + '';
+				return  num + '';
 			},
 			//一个月有多少天
 			getMonthDay(year, month) {

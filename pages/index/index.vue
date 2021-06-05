@@ -12,41 +12,42 @@
 
 <script>
 	import api from "@/api/dd.js"
+	import njp from "@/api/njp.js"
 	export default {
 		data() {
 			return {
 				menuList: [{
-						icon: 'order',
+						icon: '/static/travel.png',
 						name: '差旅报销单',
 						url: '/pages/travelBill/travelBill'
 					},
 					{
-						icon: 'order',
+						icon: '/static/loan.png',
 						name: '借款单',
 						url: '/pages/loanBill/loanBill'
 					},
 					{
-						icon: 'order',
+						icon: '/static/expenseAccount.png',
 						name: '费用报销单',
 						url: '/pages/expenseAccount/expenseAccount'
 					},
 					{
-						icon: 'order',
+						icon: '/static/serveAccount.png',
 						name: '招待费报销单',
-						url: ''
+						url: '/pages/serveAccount/serveAccount'
 					},
 					{
-						icon: 'account',
+						icon: '/static/myWallet.png',
 						name: '我的票夹',
 						url: '/pages/myWallet/myWallet'
 					},
 					{
-						icon: 'account',
+						icon: '/static/myExamine.png',
 						name: '我的审批',
 						url: ''
 					},
 					{
-						icon: 'account',
+						icon: '/static/myDocuments.png',
 						name: '我的单据',
 						url: ''
 					},
@@ -58,11 +59,13 @@
 				uni.navigateTo({
 					url: item.url,
 					success: res => {},
-					fail: () => {},
+					fail: (res) => {
+						console.log(res)
+					},
 					complete: () => {}
 				});
 			},
-			
+
 			onLoad() {
 				if (this.$dd.env.platform != 'notInDingTalk') {
 					this.$dd.ready(() => {
@@ -70,18 +73,34 @@
 							corpId: this.$Common.corpId
 						}).then((res) => {
 							uni.setStorageSync('code', res.code)
-							
 							api.getAccessToken({
 								appkey: this.$Common.appKey,
 								appsecret: this.$Common.appSecret
 							}).then(res => {
 								uni.setStorageSync('token', res.access_token)
 								let code = uni.getStorageSync('code')
+								let access_token = uni.getStorageSync('token')
 								api.getUserInfo({
-									access_token: res.access_token,
+									access_token: access_token,
 									code: code
 								}).then(res => {
-									console.log(res)
+									uni.setStorageSync('name', res.result.name)
+									api.getUser({
+										userid: res.result.userid,
+										access_token: access_token,
+									}).then(res => {
+										// njp.getSid({
+										// 	sign: '11454fbc-7395-4867-98d2-6153f122e641',
+										// 	bip: '192.168.119.80',
+										// 	pwd: 'ca1f08525519a14d2351eb84bb32be89',
+										// 	lang: 'cn',
+										// 	ipType: 0,
+										// 	userid: 40006743	
+										// }).then(res => {
+										// 	console.log(res.sid)
+										// 	uni.setStorageSync('sid', res.sid)
+										// })
+									})
 								})
 							})
 						}).catch((err) => {
@@ -91,6 +110,17 @@
 				} else {
 					alert("请在手机端访问本应用")
 				}
+				njp.getSid({
+					sign: '11454fbc-7395-4867-98d2-6153f122e641',
+					bip: '192.168.119.80',
+					pwd: 'ca1f08525519a14d2351eb84bb32be89',
+					lang: 'cn',
+					ipType: 0,
+					userid: 8256	
+				}).then(res => {
+					console.log(res.sid)
+					uni.setStorageSync('sid', res.sid)
+				})
 			}
 		}
 	}
@@ -99,7 +129,7 @@
 <style scoped lang="scss">
 	.grid-text {
 		font-size: 28rpx;
-		margin-top: 4rpx;
+		margin-top: 10rpx;
 		color: $u-type-info;
 	}
 </style>

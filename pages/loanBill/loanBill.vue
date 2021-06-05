@@ -7,17 +7,13 @@
 		</view>
 		<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item>
-				<!-- <scroll-view scroll-y style="height: 100%; width: 100%;">
-					<view class="swiper-div">
-						</view>
-				     </scroll-view> -->
 				<view class="swiper-item">
-					<basicInfo :form="form" :loan="loan"></basicInfo>
+					<basicInfo :loan="loan" @basicInfo="getBasicInfo"></basicInfo>
 				</view>
 			</swiper-item>
 			<swiper-item>
 				<view class="swiper-item">
-					<collectionInfo :form2="form2"></collectionInfo>
+					<collectionInfo :basicForm="form"></collectionInfo>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -34,6 +30,25 @@
 		},
 		data() {
 			return {
+				form: {
+					// SQRBMID: '', //申请人部门ID
+					// JKJE: '', //借款金额
+					// YWLX: '出差人民币借款', // 业务类型（暂时写死）
+					// GSGS: '', // 公司代码
+					// YWBMID: '', //业务部门代码
+					// YWBM: '', //业务部门名称
+					// YSKM: '其他应收款-职工借款', // 预算科目（暂时写死）
+					// YWSM: '', //业务描述
+					// YFORDER: '', //研发订单 传个空值
+					// SKR: '', // 收款人姓名
+					// SKYH: '', // 收款银行
+					// SKZH: '', // 收款账号
+					// SKJE: '', // 收款金额（等同于借款金额）
+					// DGDS: '', // 对公对私（2, 1）
+					// KHH: '', // 开户代码，
+					// JSFS: '', // 结算方式
+					// days: '',
+				},
 				list: [{
 						name: '基础信息'
 					},
@@ -41,42 +56,18 @@
 						name: '收款信息'
 					}
 				],
-				selectionList: [{
-						value: '0',
-						label: '对公'
-					},
-					{
-						value: '1',
-						label: '对私'
-					},
-				],
-				form: {
-					name: 'test',
-					dapart: '公司一号',
-					company: '',
-					depart: '',
-					subject: '',
-					descrp: '',
-					type: '',
-					number: 0,
-					order: ''
-				},
-				form2: {
-					name: '',
-					bank: '',
-					account: '',
-					number: 0,
-					code: '',
-					isCommon: ''
-				},
 				loan: true,
 				show: false,
 				current: 0,
 				swiperCurrent: 0,
-				selectLabel: '对公'
+				sid: ''
 			}
 		},
+		
 		methods: {
+			getBasicInfo(data) {
+				this.form = data
+			},
 			// tab栏切换
 			change(index) {
 				this.swiperCurrent = index;
@@ -95,11 +86,6 @@
 			  this.swiperCurrent = current;
 			  this.current = current;
 			  },
-			confirm(e) {
-				this.selectLabel = e[0].label;
-				this.form2.isCommon = e[0].value;
-				console.log(this.form2.isCommon);
-			}
 		}
 	}
 </script>
@@ -111,7 +97,7 @@
 	}
 	
 	.swiper-box {
-		width: 700rpx;
+		width: 98%;
 		background-color: #ffffff;
 		margin: 20rpx auto;
 		border-radius: 20rpx;

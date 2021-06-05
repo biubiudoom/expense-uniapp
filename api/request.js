@@ -5,10 +5,45 @@ import app from '../main.js'
 // 	version = app.$version
 // 	deviceType = app.$deviceType
 // },10)
-let rootPath = "/api/"
+let ddPath = "/dd/"
+let njpPath = "/njp/"
+
+const httpNJPRequest = (opts, data) => {
+	let httpDefaultOpts = {
+		url: njpPath + opts.url,
+		data: data,
+		method: opts.method,
+		header: opts.method == 'get' ? {
+			// 'X-Requested-With': 'XMLHttpRequest',
+			// "Accept": "application/json",
+			// "Content-Type": opts.contentType?opts.contentType:"application/json; charset=UTF-8",
+		} : {
+			'X-Requested-With': 'XMLHttpRequest',
+			"Content-Type": opts.contentType?opts.contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+		},
+	}
+	let promise = new Promise(function(resolve, reject) {
+		uni.request(httpDefaultOpts).then(
+			(res) => {
+				resolve(res[1].data)
+			}
+		).catch(
+			(response) => {
+				uni.showToast({
+					icon: 'none',
+					position: 'top',
+					title: '网络异常，请检查网络设置',
+					duration: 2000
+				});
+				reject(response)
+			}
+		)
+	})
+	return promise
+};
 
 const httpTokenRequest = (opts, data) => {
-	let loginCode = uni.getStorageSync('loginCode')
+	let loginCode = uni.getStorageSync('code')
 	//此token是登录成功后后台返回保存在storage中的
 	if(!loginCode){
 		uni.showToast({
@@ -24,8 +59,7 @@ const httpTokenRequest = (opts, data) => {
 	}
 	
 	let httpDefaultOpts = {
-		// url: baseUrl+opts.url,
-		url: rootPath + opts.url,
+		url: ddPath + opts.url,
 		data: data,
 		method: opts.method,
 		header: opts.method == 'get' ? {
@@ -62,5 +96,6 @@ const httpTokenRequest = (opts, data) => {
 export default {
 	// baseUrl,
 	// httpRequest,
+	httpNJPRequest,
 	httpTokenRequest
 }

@@ -32,7 +32,8 @@
 						<view>{{emptyTips}}</view>
 					</view>
 					<view class="uni-combox__selector-item" v-for="(item,index) in dataList" :key="index" @tap="onSelectorClick(index)">
-						<text>{{item[showValue]}}</text>
+						<text v-if="item.dname1">{{item.dname1}} ({{item.dname2}})</text>
+						<text v-else-if="item.YSKM">{{item.YSKM}}</text>
 					</view>
 				</scroll-view>
 			</view>
@@ -97,7 +98,7 @@
 				inputIsShow: false,
 				inputVal: '',
 				dataList: [],
-				placeholder: '请输入部门',
+				placeholder: '',
 				isShowClearIcon: false
 			}
 		},
@@ -139,7 +140,7 @@
 			onSelectorClick(index) {
 				this.inputIsShow = false
 				this.isShowClearIcon = false
-				this.inputVal = this.dataList[index][this.showValue]
+				this.inputVal = this.dataList[index]["dname1"] ? this.dataList[index]["dname1"] : this.dataList[index]["YSKM"]
 				this.$emit('input', this.inputVal)
 				this.$emit('change', this.dataList[index])
 			},
@@ -195,6 +196,10 @@
 		padding: 10rpx 80rpx;
 		font-size: 30rpx;
 		color: #999999;
+		uni-input {
+			font-size: 20rpx;
+			height: 40rpx;
+		}
 	}
 	.uniRound{
 		border-radius: 5px;
@@ -219,8 +224,9 @@
 	}
 	/* button */
 	.uni-action{
+		margin-left: 10rpx;
 		width:120rpx;
-		height: 66rpx; 
+		height: 56rpx; 
 	}
 	.uni-cu-btn{
 		width: 100%;
