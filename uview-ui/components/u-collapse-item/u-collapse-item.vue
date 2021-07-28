@@ -7,6 +7,7 @@
 					{{ title }}
 				</view>
 				<slot v-else name="title" />
+				<text class="">总计：￥ {{total}}</text>
 				<view class="u-icon-wrap">
 					<u-icon v-if="arrow" :color="arrowColor" :class="{ 'u-arrow-down-icon-active': isShow }"
 					 class="u-arrow-down-icon" name="arrow-down"></u-icon>
@@ -78,6 +79,11 @@
 			index: {
 				type: [String, Number],
 				default: ''
+			},
+			// 总金额
+			total: {
+				type: [Number, String],
+				default: 0
 			}
 		},
 		data() {

@@ -2,24 +2,15 @@
 	<view style="position: relative;" :class="size === 'small' ? 'small' : ''">
 		<view class="uni-flex" :class="{unishadow :uniShadow}">
 			<view class="uni-search-form uni-circular uni-background">
-				<icon type="search" size="14" class="uni-icon-position"/>
-				<input 
-					type="text" 
-					:placeholder="placeholder" 
-					v-model="inputVal" 
-					@input="onInput"
-					@focus="onFocus"
-				></input>
+				<icon type="search" size="14" class="uni-icon-position" />
+				<input type="text" :placeholder="placeholder" v-model="inputVal" @input="onInput"
+					@focus="onFocus"></input>
 				<!-- <icon v-if="isShowClearIcon" type="clear" size="16" class="uni-icon-clear" @tap="clearInputValue"/> -->
 			</view>
 			<view class="uni-action">
-				<button 
-					:disabled="loading" 
-					class="uni-cu-btn uni-bg-gradual-green uni-shadow-blur uni-round" 
-					:class="[type === 'primary' ? 'uni-primary' : (type === 'success' ? 'uni-success' : (type === 'warning' ? 'uni-warning' : 'uni-error'))]" 
-					hover-class="hover" 
-					@click="handleSearch"
-				>搜索</button>
+				<button :disabled="loading" class="uni-cu-btn uni-bg-gradual-green uni-shadow-blur uni-round"
+					:class="[type === 'primary' ? 'uni-primary' : (type === 'success' ? 'uni-success' : (type === 'warning' ? 'uni-warning' : 'uni-error'))]"
+					hover-class="hover" @click="handleSearch">搜索</button>
 			</view>
 		</view>
 		<view v-if="isShowSelect">
@@ -28,12 +19,16 @@
 					<view class="uni-combox__selector-empty " v-if="loading">
 						<view>加载中··· </view>
 					</view>
-					<view class="uni-combox__selector-empty " v-if="!loading && dataListLength === 0" @tap="closeDielog">
+					<view class="uni-combox__selector-empty " v-if="!loading && dataListLength === 0"
+						@tap="closeDielog">
 						<view>{{emptyTips}}</view>
 					</view>
-					<view class="uni-combox__selector-item" v-for="(item,index) in dataList" :key="index" @tap="onSelectorClick(index)">
+					<view class="uni-combox__selector-item" v-for="(item,index) in dataList" :key="index"
+						@tap="onSelectorClick(index)">
 						<text v-if="item.dname1">{{item.dname1}} ({{item.dname2}})</text>
 						<text v-else-if="item.YSKM">{{item.YSKM}}</text>
+						<text v-else-if="item.xm">{{item.xm}}</text>
+						<text v-else-if="item.BDBH">{{item.BDBH}} {{item.GCD}} {{item.WCSJ}}</text>
 					</view>
 				</scroll-view>
 			</view>
@@ -72,7 +67,7 @@
 			},
 			btnStyleColor: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			},
@@ -122,7 +117,7 @@
 				immediate: true
 			},
 			inputVal(val) {
-				if(!val.length) {
+				if (!val.length) {
 					this.isShowClearIcon = false
 				}
 			}
@@ -132,7 +127,7 @@
 				this.inputIsShow = false
 			},
 			onFocus() {
-				if(this.dataList.length) {
+				if (this.dataList.length) {
 					this.inputIsShow = true
 					this.isShowClearIcon = !!this.inputVal
 				}
@@ -140,7 +135,10 @@
 			onSelectorClick(index) {
 				this.inputIsShow = false
 				this.isShowClearIcon = false
-				this.inputVal = this.dataList[index]["dname1"] ? this.dataList[index]["dname1"] : this.dataList[index]["YSKM"]
+
+				this.inputVal = this.dataList[index]["dname1"] ? this.dataList[index]["dname1"] :
+					(this.dataList[index]["YSKM"] ? this.dataList[index]["YSKM"] :
+						(this.dataList[index]["xm"] ? this.dataList[index]["xm"] : this.dataList[index]["BDBH"]))
 				this.$emit('input', this.inputVal)
 				this.$emit('change', this.dataList[index])
 			},
@@ -162,23 +160,29 @@
 	.small {
 		transform: scale(.9, .9);
 	}
+
 	.uni-primary {
 		background-color: $uni-color-primary;
 	}
+
 	.uni-success {
 		background-color: #67c23a;
 	}
+
 	.uni-warning {
 		background-color: $uni-color-warning;
 	}
+
 	.uni-error {
 		background-color: $uni-color-error;
 	}
-	.hover{
+
+	.hover {
 		transition: all .6s;
-		transform: scale(0.8,0.8);
+		transform: scale(0.8, 0.8);
 	}
-	.uni-flex{
+
+	.uni-flex {
 		width: 100%;
 		display: flex;
 		justify-content: center;
@@ -186,49 +190,58 @@
 		padding: 10rpx 0rpx;
 		box-sizing: border-box;
 	}
+
 	// .unishadow{
 	// 	box-shadow: 0rpx 1rpx 5rpx #DDDDDD;
 	// }
-	.uni-search-form{
+	.uni-search-form {
 		position: relative;
 		width: 70%;
 		// margin: 10rpx;
 		padding: 10rpx 80rpx;
 		font-size: 30rpx;
 		color: #999999;
+
 		uni-input {
 			font-size: 20rpx;
 			height: 40rpx;
 		}
 	}
-	.uniRound{
+
+	.uniRound {
 		border-radius: 5px;
 	}
-	.uni-circular{
+
+	.uni-circular {
 		border-radius: 100rpx;
 	}
-	.uni-icon-position{
+
+	.uni-icon-position {
 		position: absolute;
 		top: 50%;
 		left: 26rpx;
-		transform: translate(0,-50%);
+		transform: translate(0, -50%);
 	}
-	.uni-icon-clear{
+
+	.uni-icon-clear {
 		position: absolute;
 		top: 50%;
 		right: 26rpx;
-		transform: translate(0,-50%);
+		transform: translate(0, -50%);
 	}
-	.uni-background{
+
+	.uni-background {
 		background-color: #F5F5F5;
 	}
+
 	/* button */
-	.uni-action{
+	.uni-action {
 		margin-left: 10rpx;
-		width:120rpx;
-		height: 56rpx; 
+		width: 120rpx;
+		height: 56rpx;
 	}
-	.uni-cu-btn{
+
+	.uni-cu-btn {
 		width: 100%;
 		height: 100%;
 		display: flex;
@@ -239,12 +252,15 @@
 		border: none;
 		// background-color: $uni-color-primary;
 	}
-	.uni-shadow-blur{
+
+	.uni-shadow-blur {
 		box-shadow: 0rpx 1rpx 10rpx #C8C7CC;
 	}
-	.uni-round{
+
+	.uni-round {
 		border-radius: 100rpx;
 	}
+
 	.uni-combox__selector {
 		position: absolute;
 		top: 100rpx;
@@ -256,10 +272,12 @@
 		box-shadow: #DDDDDD 4px 4px 8px, #DDDDDD -4px -4px 8px;
 		z-index: 999;
 	}
+
 	.uni-combox__selector-scroll {
 		max-height: 200px;
 		box-sizing: border-box;
 	}
+
 	.uni-combox__selector::before {
 		content: '';
 		position: absolute;
@@ -272,12 +290,14 @@
 		top: -6px;
 		margin-left: -6px;
 	}
-	.uni-combox__selector-empty{
+
+	.uni-combox__selector-empty {
 		text-align: center;
 		color: #8F8F94;
 		padding: 20rpx 0;
 		font-size: 28rpx;
 	}
+
 	.uni-combox__selector-item {
 		/* #ifdef APP-NVUE */
 		display: flex;
@@ -287,9 +307,11 @@
 		padding: 20rpx 10rpx;
 		color: #808080;
 	}
+
 	.uni-combox__selector-item:hover {
 		background-color: #DDDDDD;
 	}
+
 	.uni-combox__selector-empty:last-child,
 	.uni-combox__selector-item:last-child {
 		border-bottom: none;

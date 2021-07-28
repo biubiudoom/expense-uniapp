@@ -8,18 +8,17 @@
 		<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item>
 				<view class="swiper-item">
-					<basicInfo @basicInfo="getBasicInfo"></basicInfo>
+					<basicInfo @basicInfo="getBasicInfo" :expense="expense"></basicInfo>
 				</view>
 			</swiper-item>
 			<swiper-item>
-				<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
-					<bill-detail ></bill-detail>
-					<!-- <u-loadmore status="loadmore" bgColor="#f2f2f2"></u-loadmore> -->
-				</scroll-view>
+				<view class="swiper-item">
+					<bill-detail @billInfo="getBillInfo" @totalCount="getTotalCount" @invoiceList="getInvoiceList"></bill-detail>
+				</view>
 			</swiper-item>
 			<swiper-item>
 				<view class="swiper-item">
-					<collectionInfo :basicForm="form"></collectionInfo>
+					<collectionInfo :basicForm="form" :billInfo="billInfo" :totalCount="totalCount" :invoiceList="invoiceList" :type="type"></collectionInfo>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -69,14 +68,27 @@
 				},
 				popShow: false,
 				show: false,
+				expense: true,
 				current: 0,
+				type: 'postExpenseBill',
 				swiperCurrent: 0,
-				selectLabel: '对公'
+				billInfo: [],
+				totalCount: 0,
+				invoiceList: []
 			}
 		},
 		methods: {
 			getBasicInfo(data) {
 				this.form = data
+			},
+			getInvoiceList(index, data) {
+				this.invoiceList = data
+			},
+			getBillInfo(index, data) {
+				this.billInfo = data
+			},
+			getTotalCount(index, data) {
+				this.totalCount = data
 			},
 			// tab栏切换
 			change(index) {

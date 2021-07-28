@@ -3,7 +3,7 @@ export default {
 	getSid(data) {
 		return request.httpNJPRequest({
 			url: "njp-app-web/rest/BPMSessionID/getBPMsidByWebService",
-			method: "get",
+			method: "post",
 		}, data)
 	},
 }

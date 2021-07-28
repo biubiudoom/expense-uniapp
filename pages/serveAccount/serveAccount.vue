@@ -8,18 +8,17 @@
 		<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item>
 				<view class="swiper-item">
-					<basicInfo @basicInfo="getBasicInfo"></basicInfo>
+					<basicInfo @basicInfo="getBasicInfo" :serve="serve"></basicInfo>
 				</view>
 			</swiper-item>
 			<swiper-item>
 				<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
-					<bill-detail ></bill-detail>
-					<!-- <u-loadmore status="loadmore" bgColor="#f2f2f2"></u-loadmore> -->
+					<bill-detail @billInfo="getBillInfo" @totalCount="getTotalCount"></bill-detail>
 				</scroll-view>
 			</swiper-item>
 			<swiper-item>
 				<view class="swiper-item">
-					<collectionInfo :basicForm="form"></collectionInfo>
+					<collectionInfo :basicForm="form" :billInfo="billInfo" :totalCount="totalCount" :type="type"></collectionInfo>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -48,35 +47,29 @@
 						name: '收款信息'
 					}
 				],
-				form: {
-					// SQRBMID: '', //申请人部门ID
-					// JKJE: '', //借款金额
-					// YWLX: '出差人民币借款', // 业务类型（暂时写死）
-					// GSGS: '', // 公司代码
-					// YWBMID: '', //业务部门代码
-					// YWBM: '', //业务部门名称
-					// YSKM: '其他应收款-职工借款', // 预算科目（暂时写死）
-					// YWSM: '', //业务描述
-					// YFORDER: '', //研发订单 传个空值
-					// SKR: '', // 收款人姓名
-					// SKYH: '', // 收款银行
-					// SKZH: '', // 收款账号
-					// SKJE: '', // 收款金额（等同于借款金额）
-					// DGDS: '', // 对公对私（2, 1）
-					// KHH: '', // 开户代码，
-					// JSFS: '', // 结算方式
-					// days: '',
-				},
+				form: {},
 				popShow: false,
 				show: false,
 				current: 0,
+				type: 'postServeBill',
 				swiperCurrent: 0,
-				selectLabel: '对公'
+				billInfo: [],
+				totalCount: 0,
+				serve: true
 			}
 		},
 		methods: {
 			getBasicInfo(data) {
 				this.form = data
+			},
+			getInvoiceList(index, data) {
+				this.invoiceList = data
+			},
+			getBillInfo(index, data) {
+				this.billInfo = data
+			},
+			getTotalCount(index, data) {
+				this.totalCount = data
 			},
 			// tab栏切换
 			change(index) {

@@ -8,39 +8,27 @@
 		<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item>
 				<view class="swiper-item">
-					<basicInfo :form="form" :travel="travel"></basicInfo>
+					<basicInfo @basicInfo="getBasicInfo" @caterCost="getCaterCost" @gasCost="getGasCost" 
+							   @photoList="getPhotoList" @ :travel="travel" @totalCount="getTotalCount"></basicInfo>
 				</view>
 			</swiper-item>
 			<swiper-item>
-				<scroll-view scroll-y style="height: 90%;width: 100%;" @scrolltolower="reachBottom">
+				<scroll-view scroll-y style="height: 100% ;width: 100%;">
 					<u-collapse :head-style="headStyle" :body-style="bodyStyle">
-						<u-collapse-item v-for="(item,index) in typeList" :title="item.title" :showAnimation="true" :open="item.open">
-							<bill-detail :orderList="orderList"></bill-detail>
-							<!-- <u-loadmore status="loadmore" bgColor="#f2f2f2"></u-loadmore> -->
-							<u-popup v-model="popShow" mode="bottom">
-								<view class="importBtn">
-									<u-button hair-line="false">从我的票夹导入</u-button>
-									<u-button hair-line="false">直接拍照导入</u-button>
-									<u-button @tap="popShow = false" hair-line="false">取消</u-button>
-								</view>
-							</u-popup>
+						<u-collapse-item v-for="(item,index) in typeList" :title="item.title" :showAnimation="true" 
+						                 :total="totalCount[index]" :open="item.open">
+							<bill-detail @billInfo="getBillInfo" @totalCount="getTotalCount" @billPhotos="getBillPhotos" 
+										 @invoiceList="getInvoiceList" @invoicenoList="getInvoicenoList" 
+										 :travel="travel" :index="index"></bill-detail>
 						</u-collapse-item>
 					</u-collapse>
 				</scroll-view>
-				<!-- <view class="bottom">
-					<view class="totalCount">
-						<view class="travelCost">
-							管理费用-差旅费         ￥
-						</view>
-						<view class="dinningCost">
-							管理费用-餐饮费
-						</view>
-					</view>
-				</view> -->
 			</swiper-item>
 			<swiper-item>
 				<view class="swiper-item">
-					<collectionInfo :form2="form2"></collectionInfo>
+					<collectionInfo :basicForm="form" :caterCost="caterCost" :gasCost="gasCost" 
+									:billInfo="billInfo" :invoiceList="invoiceList" :invoicenoList="invoicenoList" 
+									:totalCount="totalCount" :SKJE="SKJE" :photoList="photoList" :type="type"></collectionInfo>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -69,65 +57,9 @@
 						name: '收款信息'
 					}
 				],
-
-				form: {
-					name: '',
-					company: '',
-					depart: '',
-					subject: '',
-					descrp: '',
-					pattern: '',
-					number: 0,
-					order: ''
-				},
-				form2: {
-					name: '',
-					bank: '',
-					account: '',
-					number: 0,
-					code: '',
-					isCommon: ''
-				},
-				orderList: [{
-						purchaser: '杰克缝纫机股份有限公司',
-						seller: 'XXX酒店',
-						contact: '2021-5-12',
-						price: '1200'
-					},
-					{
-						purchaser: '杰克缝纫机股份有限公司',
-						seller: 'XXX酒店',
-						contact: '2021-5-12',
-						price: '1200'
-					},
-					{
-						purchaser: '杰克缝纫机股份有限公司',
-						seller: 'XXX酒店',
-						contact: '2021-5-12',
-						price: '1200'
-					},
-					{
-						purchaser: '杰克缝纫机股份有限公司',
-						seller: 'XXX酒店',
-						contact: '2021-5-12',
-						price: '1200'
-					},
-					{
-						purchaser: '杰克缝纫机股份有限公司',
-						seller: 'XXX酒店',
-						contact: '2021-5-12',
-						price: '1200'
-					},
-					{
-						purchaser: '杰克缝纫机股份有限公司',
-						seller: 'XXX酒店',
-						contact: '2021-5-12',
-						price: '1200'
-					},
-				],
+				form: {},
 				typeList: [{
 						title: '行程',
-						open: true
 					},
 					{
 						title: '住宿'
@@ -148,21 +80,84 @@
 					height: '80rpx'
 				},
 				bodyStyle: {
-					color: '#000000'
+					color: '#000000',
 				},
-				popShow: false,
 				travel: true,
 				show: false,
 				current: 0,
 				swiperCurrent: 0,
-				selectLabel: '对公'
+				billInfo: [],
+				photoList: [],
+				totalCount: [],
+				invoiceList: [],
+				invoicenoList: [],
+				caterCost: 0,
+				type: 'postTravelBill',
+				SKJE: 0,
+				gasCost: 0
 			}
 		},
 		methods: {
+			getBasicInfo(data) {
+				this.form = data
+			},
+			getGasCost(data) {
+				this.gasCost = parseFloat(data)
+			},
+			getCaterCost(data) {
+				this.caterCost = data
+			},
+			getPhotoList(data) {
+				this.photoList = data
+			},
+			getBillPhotos(data) {
+				for (let i in data) {
+					this.photoList.push(data[i])
+				}
+			},
+			getInvoiceList(index, data) {
+				this.invoiceList[index] = data
+			},
+			getInvoicenoList(index, data) {
+				this.invoicenoList[index] = data
+			},
+			getBillInfo(index, data) {
+				this.billInfo[index] = data
+			},
+			getTotalCount(index, data) {
+				if (data) {
+					this.$set(this.totalCount, index, data)
+				} else {
+					this.$set(this.totalCount, index, 0)
+				}
+				let stayStandard = 0
+				let taxiStandard = this.form.CZCTS * (this.form.CZCBZ.split('-')[1])
+				let stayCost
+				let taxiCost 
+				let travelCost = this.totalCount[0] ? this.totalCount[0] : 0
+				let otherCost = this.totalCount[4] ? this.totalCount[4] : 0
+				for (let i in this.form.ZSBZ) {
+					if (this.form.ZSTS[i]) {
+						stayStandard +=  parseInt(this.form.ZSTS[i]) * (this.form.ZSBZ[i].split('-')[2])
+					}
+				}
+				if (this.totalCount[1]) {
+					stayCost = this.totalCount[1] > stayStandard ? stayStandard : this.totalCount[1]
+				} else {
+					stayCost = 0
+				}
+				if ('营销(Marketing)-20' == this.form.CZCBZ) {
+					taxiCost = taxiStandard
+				} else if (this.totalCount[2]) {
+					taxiCost = this.totalCount[2] > taxiStandard ? taxiStandard : this.totalCount[2]
+				} else {
+					taxiCost = 0
+				}
+				this.SKJE = travelCost + stayCost + taxiCost + otherCost
+			},
 			// tab栏切换
 			change(index) {
 				this.swiperCurrent = index;
-				// this.getOrderList(index);
 			},
 			transition(e) {
 				let dx = e.detail.dx;

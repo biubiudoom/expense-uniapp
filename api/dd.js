@@ -3,12 +3,12 @@ export default {
 	getAccessToken(data) {
 		return request.httpTokenRequest({
 			url:"gettoken",
-			method: "get",
+			method: "post",
 		}, data)
 	},
 	getUserInfo(data) {
 		return request.httpTokenRequest({
-			url:"topapi/v2/user/getuserinfo",
+			url:  "topapi/v2/user/getuserinfo",
 			method: "post",
 			data,	
 		}, data)

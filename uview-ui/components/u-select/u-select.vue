@@ -407,7 +407,7 @@ export default {
 				@include vue-flex;
 				align-items: center;
 				justify-content: center;
-				font-size: 32rpx;
+				font-size: 28rpx;
 				color: $u-main-color;
 				padding: 0 8rpx;
 			}

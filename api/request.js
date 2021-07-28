@@ -5,8 +5,10 @@ import app from '../main.js'
 // 	version = app.$version
 // 	deviceType = app.$deviceType
 // },10)
-let ddPath = "/dd/"
-let njpPath = "/njp/"
+let ddPath = "https://oapi.dingtalk.com/"
+// let njpPath = "http://market.chinajack.com/TravelExpense/requestRelay.php"
+// let ddPath = "/dd/"
+// let njpPath = "/njp/"
 
 const httpNJPRequest = (opts, data) => {
 	let httpDefaultOpts = {
@@ -43,23 +45,23 @@ const httpNJPRequest = (opts, data) => {
 };
 
 const httpTokenRequest = (opts, data) => {
-	let loginCode = uni.getStorageSync('code')
-	//此token是登录成功后后台返回保存在storage中的
-	if(!loginCode){
-		uni.showToast({
-			position:'top',
-			title:'认证失效，请重新登陆',
-			icon:'none'
-		})
-		setTimeout(()=>{
-		 uni.reLaunch({
-			url:'/pages/index/index'
-		 })
-	 },1000)
-	}
+	// let loginCode = uni.getStorageSync('code')
+	// //此token是登录成功后后台返回保存在storage中的
+	// if(!loginCode){
+	// 	uni.showToast({
+	// 		position:'top',
+	// 		title:'认证失效，请重新登陆',
+	// 		icon:'none'
+	// 	})
+	// 	setTimeout(()=>{
+	// 	 uni.reLaunch({
+	// 		url:'/pages/index/index'
+	// 	 })
+	//  },1000)
+	// }
 	
 	let httpDefaultOpts = {
-		url: ddPath + opts.url,
+		url:  "requestRelay.php",
 		data: data,
 		method: opts.method,
 		header: opts.method == 'get' ? {

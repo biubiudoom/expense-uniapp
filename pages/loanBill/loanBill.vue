@@ -8,12 +8,12 @@
 		<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 			<swiper-item>
 				<view class="swiper-item">
-					<basicInfo :loan="loan" @basicInfo="getBasicInfo"></basicInfo>
+					<basicInfo :loan="true" @basicInfo="getBasicInfo"></basicInfo>
 				</view>
 			</swiper-item>
 			<swiper-item>
 				<view class="swiper-item">
-					<collectionInfo :basicForm="form"></collectionInfo>
+					<collectionInfo :basicForm="form" :type="type"></collectionInfo>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -56,11 +56,10 @@
 						name: '收款信息'
 					}
 				],
-				loan: true,
 				show: false,
 				current: 0,
 				swiperCurrent: 0,
-				sid: ''
+				type: 'postLoanBill'
 			}
 		},
 		

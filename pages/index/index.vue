@@ -36,11 +36,11 @@
 						name: '招待费报销单',
 						url: '/pages/serveAccount/serveAccount'
 					},
-					{
-						icon: '/static/myWallet.png',
-						name: '我的票夹',
-						url: '/pages/myWallet/myWallet'
-					},
+					// {
+					// 	icon: '/static/myWallet.png',
+					// 	name: '我的票夹',
+					// 	url: '/pages/myWallet/myWallet'
+					// },
 					{
 						icon: '/static/myExamine.png',
 						name: '我的审批',
@@ -60,10 +60,13 @@
 					url: item.url,
 					success: res => {},
 					fail: (res) => {
-						console.log(res)
+						uni.showToast({
+							icon: 'error',
+							title: '暂不支持，请等待后续开发'
+						})
 					},
 					complete: () => {}
-				});
+				});	
 			},
 
 			onLoad() {
@@ -72,34 +75,44 @@
 						this.$dd.runtime.permission.requestAuthCode({
 							corpId: this.$Common.corpId
 						}).then((res) => {
-							uni.setStorageSync('code', res.code)
+							let code = res.code
 							api.getAccessToken({
+								url: "https://oapi.dingtalk.com/gettoken",
 								appkey: this.$Common.appKey,
 								appsecret: this.$Common.appSecret
 							}).then(res => {
-								uni.setStorageSync('token', res.access_token)
-								let code = uni.getStorageSync('code')
-								let access_token = uni.getStorageSync('token')
+								let access_token = res.access_token
 								api.getUserInfo({
+									url: "https://oapi.dingtalk.com/topapi/v2/user/getuserinfo",
 									access_token: access_token,
 									code: code
 								}).then(res => {
-									uni.setStorageSync('name', res.result.name)
+									let DDuserid = res.result.userid
 									api.getUser({
-										userid: res.result.userid,
+										url: "https://oapi.dingtalk.com/topapi/v2/user/get",
+										userid: DDuserid,
 										access_token: access_token,
 									}).then(res => {
-										// njp.getSid({
-										// 	sign: '11454fbc-7395-4867-98d2-6153f122e641',
-										// 	bip: '192.168.119.80',
-										// 	pwd: 'ca1f08525519a14d2351eb84bb32be89',
-										// 	lang: 'cn',
-										// 	ipType: 0,
-										// 	userid: 40006743	
-										// }).then(res => {
-										// 	console.log(res.sid)
-										// 	uni.setStorageSync('sid', res.sid)
-										// })
+										let userid = res.result.job_number
+										uni.request({
+											url: this.$Common.commonUrl,
+											method: 'POST',
+											header: {
+												'Content-Type': "application/x-www-form-urlencoded"
+											},
+											data: {
+												url: this.$Common.njpUrl,
+												sign: '11454fbc-7395-4867-98d2-6153f122e641',
+												bip: '116.62.215.38',
+												pwd: 'ca1f08525519a14d2351eb84bb32be89',
+												lang: 'cn',
+												ipType: 0,
+												userid: userid
+											},
+											success: (res) => {
+												uni.setStorageSync('sid', res.data.sid)
+											}
+										})
 									})
 								})
 							})
@@ -110,17 +123,25 @@
 				} else {
 					alert("请在手机端访问本应用")
 				}
-				njp.getSid({
-					sign: '11454fbc-7395-4867-98d2-6153f122e641',
-					bip: '192.168.119.80',
-					pwd: 'ca1f08525519a14d2351eb84bb32be89',
-					lang: 'cn',
-					ipType: 0,
-					userid: 8256	
-				}).then(res => {
-					console.log(res.sid)
-					uni.setStorageSync('sid', res.sid)
-				})
+				// uni.request({
+				// 	url: this.$Common.commonUrl,
+				// 	method: 'POST',
+				// 	header: {
+				// 		'Content-Type': "application/x-www-form-urlencoded"
+				// 	},
+				// 	data: {
+				// 		url: this.$Common.njpUrl,
+				// 		sign: '11454fbc-7395-4867-98d2-6153f122e641',
+				// 		bip: '192.168.119.80',
+				// 		pwd: 'ca1f08525519a14d2351eb84bb32be89',
+				// 		lang: 'cn',
+				// 		ipType: 0,
+				// 		userid: 8256	
+				// 	},
+				// 	success: (res) => {
+				// 		uni.setStorageSync('sid', res.data.sid)
+				// 	}
+				// })
 			}
 		}
 	}
